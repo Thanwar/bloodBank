@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
+
 
 
 const Main = ({navigation}) => {
@@ -28,12 +30,22 @@ const Main = ({navigation}) => {
 
 
   const needblood = ()=>{
-    navigation.navigate('Donarlist');
+    navigation.navigate('Centerlist');
   }
 
   const donateblood = ()=>{
-    navigation.navigate('Centerlist');
+    navigation.navigate('Donarlist');
   }
+
+  const signout = ()=>{
+    auth()
+    .signOut()
+    .then(() => {
+      console.log('User signed out!');
+      navigation.navigate('login');
+    });
+  }
+  
 
   return (
     <>
@@ -51,6 +63,13 @@ const Main = ({navigation}) => {
           activeOpacity={0.5}
           style={styles.Button}>
           <Text style={styles.btntext}>Donate Blood</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={signout}
+          activeOpacity={0.5}
+          style={styles.Button}>
+          <Text style={styles.btntext}>Sign Out</Text>
         </TouchableOpacity>
       </View>
     </>

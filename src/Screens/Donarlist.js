@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import database from '@react-native-firebase/database';
 
 
 const Donarlist = ({navigation}) => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
+
       headerTitle: (props) => (
         <Text {...props} style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
           Blood Bank
@@ -27,22 +29,69 @@ const Donarlist = ({navigation}) => {
   }, [navigation]);
 
 
-  const back = ()=>{
-    navigation.navigate('login');
+  const [name, setName] = useState('');
+  const [group, setGroup] = useState('');
+  const [contact, setContact] = useState('');
+  const [location, setLocation] = useState('');
+
+  let user = {
+    name,
+    group,
+    contact,
+    location,
   }
+
+  const register = ()=>{
+    database()
+    .ref('/').push(user)
+    .then(() => {
+      console.log('Data pushed.==>',user);
+      navigation.navigate('Main');
+    });
+    }
+  
 
   return (
     <>
+      <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.sucess}>Donar list.</Text>
-  
+        <Text style={styles.sucess}>Register</Text>
+        <TextInput
+          placeholder="Enter your Name"
+          type="text"
+          style={styles.inputs}
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+        <TextInput
+          placeholder="Enter your Blood group"
+          type="text"
+          style={styles.inputs}
+          value={group}
+          onChangeText={(text) => setGroup(text)}
+        />
+        <TextInput
+          placeholder="Enter your Contact"
+          type="text"
+          style={styles.inputs}
+          value={contact}
+          onChangeText={(text) => setContact(text)}
+        />
+        <TextInput
+          placeholder="Enter your Location"
+          type="text"
+          style={styles.inputs}
+          value={location}
+          onChangeText={(text) => setLocation(text)}
+        />
         <TouchableOpacity
-          onPress={back}
+          onPress={register}
           activeOpacity={0.5}
           style={styles.Button}>
-          <Text style={styles.btntext}>Go Back to Login</Text>
+          <Text style={styles.btntext}>Register</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </>
   );
 };
@@ -57,8 +106,8 @@ const styles = StyleSheet.create({
     fontSize: 40,
     textAlign: 'center',
     fontWeight: 'bold',
-    marginTop: 100,
-    marginBottom: 100,
+    marginTop: 20,
+    marginBottom: 20,
   },
   text: {
     fontSize: 30,
@@ -69,6 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     width: '70%',
     padding: 10,
+    marginBottom: 30,
   },
   btntext: {
     color: 'white',
@@ -76,12 +126,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputs: {
-    margin: 10,
-    height: 40,
+    margin: 20,
+    height: 60,
     width: '80%',
     borderColor: 'red',
     borderWidth: 2,
     padding: 10,
+    fontSize: 25,
   },
 });
 

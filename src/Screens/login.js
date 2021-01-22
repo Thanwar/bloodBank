@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
+
 
 const Login = ({navigation}) => {
   const [user, setuser] = useState('');
@@ -28,9 +30,21 @@ const Login = ({navigation}) => {
   }, [navigation]);
 
   const login = () => {
-    navigation.navigate('Main');
     console.log('user==>', user);
     console.log('pass==>', pass);
+    auth().signInWithEmailAndPassword(user, pass)
+        .then((result)=>{
+        // console.log(result)
+        console.log("Login sucessfully..")
+        navigation.navigate('Main');
+        })
+        .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+        console.log(errorMessage)
+        });
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -9,32 +9,51 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-
+import auth from '@react-native-firebase/auth';
 
 const Signup = ({navigation}) => {
-
-  const [user, setuser] = useState("");
-  const [pass, setpass] = useState("");
+  const [user, setuser] = useState('');
+  const [pass, setpass] = useState('');
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: (props) => (
-        <Text {...props} style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+        <Text
+          {...props}
+          style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
           Blood Bank
         </Text>
       ),
       headerStyle: {
-        backgroundColor: "red",
+        backgroundColor: 'red',
       },
     });
   }, [navigation]);
 
+  const signup = () => {
+    console.log('user==>', user);
+    console.log('pass==>', pass);
+    auth()
+      .createUserWithEmailAndPassword(
+        user,
+        pass,
+      )
+      .then(() => {
+        console.log('User account created & signed in!');
+        navigation.navigate('Signupcomplete');
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
 
-  const signup = ()=>{
-    navigation.navigate('Signupcomplete');
-    console.log("user==>",user);
-    console.log("pass==>",pass)
-  }
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  };
 
   return (
     <>
@@ -45,7 +64,7 @@ const Signup = ({navigation}) => {
           type="email"
           style={styles.inputs}
           value={user}
-          onChangeText={text => setuser(text)}
+          onChangeText={(text) => setuser(text)}
         />
         <TextInput
           secureTextEntry={true}
@@ -53,7 +72,7 @@ const Signup = ({navigation}) => {
           type="password"
           style={styles.inputs}
           value={pass}
-          onChangeText={text => setpass(text)}
+          onChangeText={(text) => setpass(text)}
         />
         <TouchableOpacity
           onPress={signup}
@@ -72,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
   },
-  mainheading:{
+  mainheading: {
     fontSize: 40,
     textAlign: 'center',
     fontWeight: 'bold',

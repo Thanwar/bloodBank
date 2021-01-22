@@ -20,10 +20,11 @@ const Navigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Signupcomplete" component={Signupcomplete} />
-        <Stack.Screen name="Main" component={Main} />
+        {/* <Stack.Screen name="Main" component={Main} /> */}
         <Stack.Screen name="Centerlist" component={Centerlist} />
         <Stack.Screen name="Donarlist" component={Donarlist} />
       </Stack.Navigator>
