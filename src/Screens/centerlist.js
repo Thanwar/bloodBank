@@ -12,6 +12,24 @@ import {
 } from 'react-native';
 import database from '@react-native-firebase/database';
 
+// let templist = [];
+// for (var i = 0; i < user.length; i++) {
+//   templist.push(
+//     <View style={styles.cards}>
+//       { data.map(users => (
+//           <View key={"users"+i} style={styles.listofdonar}>
+//             <Text>value of {i}</Text>
+//             <Text>{users.name}</Text>
+//             <Text>{users.group}</Text>
+//             <Text>{users.contact}</Text>
+//             <Text>{users.location}</Text>
+//           </View>
+//         )
+//         )}
+//     </View>,
+//   )
+// }
+
 const CenterList = ({navigation}) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -28,7 +46,7 @@ const CenterList = ({navigation}) => {
     });
   }, [navigation]);
 
-  const [data, setdata] = useState({});
+  const [data, setdata] = useState([]);
   const [user, setuser] = useState('');
   const [loading, setloading] = useState(true);
   const [list, setlist] = useState([]);
@@ -39,40 +57,33 @@ const CenterList = ({navigation}) => {
       .once('value')
       .then((snapshot) => {
         console.log('User data: ', snapshot.val());
-        let temp = snapshot.val();
+        let temp = snapshot.val() ? snapshot.val() : {};
         let temp2 = Object.entries(temp);
-        setdata(temp2);
+        setdata(temp);
         setuser(Object.keys(temp));
+        console.log('Useeffect keys===============>', data);
+
+        let obj = Object.fromEntries(temp2);
+        let obj2 = Object.values(obj);
+        // setuser(obj);
+
+        // const templist = [];
+        // obj2.map((product) => {
+        //   templist.push(product);
+        // });
+
         setloading(false);
-        let templist = [];
-        for (var i = 0; i < user.length; i++) {
-          templist.push(
-            <View>
-              {data &&
-                data[i].map((users) => (
-                  <View>
-                    <Text style={styles.listofdonar}>{users.name}</Text>
-                    <Text style={styles.listofdonar}>{users.group}</Text>
-                    <Text style={styles.listofdonar}>{users.contact}</Text>
-                    <Text style={styles.listofdonar}>{users.location}</Text>
-                  </View>
-                ))}
-            </View>,
-          );
-        }
-        console.log('Useeffect keys===============>', templist);
-        setlist(templist);
       });
-  }, []);
+  }, [loading]);
 
   const back = () => {
     // navigation.navigate('login');
     // let user = data.map(users=>users.name)
     // console.log("pressed===>",user[0].name);
-    // console.log(data);
+    // console.log(list);
     // console.log(data[0].map(users=>users));
 
-    console.log('pressed keys===============>', list);
+    console.log('pressed keys===============>', data);
   };
 
   if (loading) {
@@ -85,17 +96,22 @@ const CenterList = ({navigation}) => {
 
   return (
     <>
-    <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.sucess}>List of Donars</Text>
-        <View>{list}</View>
-        <TouchableOpacity
-          onPress={back}
-          activeOpacity={0.5}
-          style={styles.Button}>
-          <Text style={styles.btntext}>Refrdfgesh</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.sucess}>List of Donars</Text>          
+          <View style={styles.cards}>
+          <Text style={styles.listofdonar}>{JSON.stringify(data)}</Text>
+          </View>
+          <View>
+            {/* <Text>{user.map((users) => users.name)}</Text> */}
+          </View>
+          <TouchableOpacity
+            onPress={back}
+            activeOpacity={0.5}
+            style={styles.Button}>
+            <Text style={styles.btntext}>Refresh</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </>
   );
@@ -123,6 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     width: '70%',
     padding: 10,
+    marginBottom:50,
   },
   btntext: {
     color: 'white',
@@ -138,19 +155,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   listofdonar: {
-    fontSize: 30,
+    fontSize: 40,
+    margin: 10,
+    padding: 10,
   },
   cards: {
-    backgroundColor: "red",
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 12,
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.0,
-
-    elevation: 24,
+    margin: 10,
   },
 });
 

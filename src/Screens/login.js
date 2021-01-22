@@ -15,6 +15,8 @@ import auth from '@react-native-firebase/auth';
 const Login = ({navigation}) => {
   const [user, setuser] = useState('');
   const [pass, setpass] = useState('');
+  const [Error, setError] = useState('');
+
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -43,7 +45,8 @@ const Login = ({navigation}) => {
         var errorCode = error.code;
         var errorMessage = error.message;
         // ...
-        console.log(errorMessage)
+        setError(errorMessage);
+        console.log(errorMessage);
         });
   };
 
@@ -66,6 +69,8 @@ const Login = ({navigation}) => {
           value={pass}
           onChangeText={(text) => setpass(text)}
         />
+        {Error ? 
+        <Text style={styles.error}>{Error}</Text> : null }
         <TouchableOpacity
           onPress={login}
           activeOpacity={0.5}
@@ -121,6 +126,11 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     borderWidth: 2,
     padding: 10,
+  },
+  error:{
+    color: "red",
+    fontSize: 20,
+    margin:10,
   },
 });
 
